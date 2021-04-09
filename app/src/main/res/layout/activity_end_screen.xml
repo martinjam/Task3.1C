@@ -5,13 +5,23 @@
     android:orientation="vertical"
     android:background="@color/white"
     >
+    <View
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        />
+    <View
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:layout_weight="1">
         <TextView
-            android:id="@+id/titleTextView"
+            android:id="@+id/congratsTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="25dp"
@@ -30,13 +40,12 @@
         android:layout_weight="1">
 
         <TextView
-            android:id="@+id/nameTextView"
+            android:id="@+id/scoreTextView"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_margin="15dp"
             android:layout_weight="1"
             android:textSize="18dp"
-            android:text="Enter your name:"
             android:textAlignment="viewEnd"
             />
 
@@ -44,8 +53,7 @@
             android:id="@+id/nameEditText"
             android:layout_width="match_parent"
             android:layout_marginRight="70dp"
-            android:layout_marginBottom="15dp"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:layout_weight="1"
             />
     </LinearLayout>
@@ -61,8 +69,6 @@
             android:id="@+id/startButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@android:color/darker_gray"
-            android:textColor="@android:color/white"
             android:layout_marginTop="10dp"
             android:text="START"
             android:onClick="startQuiz"
@@ -75,9 +81,5 @@
         android:layout_width="match_parent"
         android:layout_weight="1"
         />
-    <View
-        android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:layout_weight="1"
-        />
+
 </androidx.appcompat.widget.LinearLayoutCompat>
