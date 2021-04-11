@@ -9,19 +9,23 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-//    public String[] answers = {
-//            "ImageView",
-//            "id",
-//            "px",
-//            "camelcase",
-//            "drawable"
-//    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        try {
+            Intent intent = getIntent();
+            EditText username = findViewById(R.id.nameEditText);
+            String name = intent.getStringExtra("username");
+            if (name != null) {
+                username.setText(name);
+            }
 
+        } catch(Exception e){
+            //Do nothing
+        }
     }
 
     public void startQuiz(View view) {

@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 public class QuestionScreen extends AppCompatActivity {
     boolean canClick = true;
+    Button buttonClicked;
+    Boolean next = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,6 @@ public class QuestionScreen extends AppCompatActivity {
                 buttonThree.setText("EditText");
                 welcomeTextView.setText("Welcome " + intent.getStringExtra("username"));
                 intent.putExtra("currentAnswer", "ImageView");
-                intent.putExtra("nextAnswer", "id");
                 break;
             case "2":
                 progressBar.setImageResource(R.drawable.progress2of5);
@@ -53,18 +54,16 @@ public class QuestionScreen extends AppCompatActivity {
                 buttonOne.setText("gravity");
                 buttonTwo.setText("id");
                 buttonThree.setText("text");
-                intent.putExtra("currentAnswer", intent.getStringExtra("nextAnswer"));
-                intent.putExtra("nextAnswer", "px");
+                intent.putExtra("currentAnswer", "id");
                 break;
             case "3":
                 progressBar.setImageResource(R.drawable.progress3of5);
                 title.setText("Onscreen Measurements ");
-                questionText.setText("What unit abbreviation is used to represent a measurement in pixels?");
-                buttonOne.setText("dp");
-                buttonTwo.setText("px");
-                buttonThree.setText("sp");
-                intent.putExtra("currentAnswer", intent.getStringExtra("nextAnswer"));
-                intent.putExtra("nextAnswer", "camelcase");
+                questionText.setText("What does the unit abbreviation for px stand for?");
+                buttonOne.setText("dependent");
+                buttonTwo.setText("pixels");
+                buttonThree.setText("inches");
+                intent.putExtra("currentAnswer", "pixels");
                 break;
             case "4":
                 progressBar.setImageResource(R.drawable.progress4of5);
@@ -73,8 +72,7 @@ public class QuestionScreen extends AppCompatActivity {
                 buttonOne.setText("camelcase");
                 buttonTwo.setText("snakecase");
                 buttonThree.setText("flat case");
-                intent.putExtra("currentAnswer", intent.getStringExtra("nextAnswer"));
-                intent.putExtra("nextAnswer", "drawable");
+                intent.putExtra("currentAnswer", "camelcase");
                 break;
             case "5":
                 progressBar.setImageResource(R.drawable.progress5of5);
@@ -83,15 +81,80 @@ public class QuestionScreen extends AppCompatActivity {
                 buttonOne.setText("manifests");
                 buttonTwo.setText("drawable");
                 buttonThree.setText("Gradle Scripts");
-                intent.putExtra("currentAnswer", intent.getStringExtra("nextAnswer"));
-                break;
-            case "6":
-                Toast.makeText(this, "end of quiz", Toast.LENGTH_SHORT).show();
+                intent.putExtra("currentAnswer", "drawable");
                 break;
         }
     }
 
     public void nextQuestion(View view) {
+        if (buttonClicked != null && next == true) {
+            next(view);
+        } else if (buttonClicked != null) {
+            checkAnswer();
+            next = true;
+            switchSubmitButton();
+        } else {
+            Toast.makeText(this, "Please select an answer", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    private void switchSubmitButton() {
+        Button nextButton = findViewById(R.id.nextButton);
+        nextButton.setText("Next");
+    }
+
+    public void buttonOne(View view) {
+        if (canClick) {
+            buttonClicked = findViewById(R.id.optionOneButton);
+        }
+    }
+
+    public void buttonTwo(View view) {
+        if (canClick) {
+            buttonClicked = findViewById(R.id.optionTwoButton);
+        }
+    }
+
+    public void buttonThree(View view) {
+        if (canClick) {
+            buttonClicked = findViewById(R.id.optionThreeButton);
+        }
+    }
+
+    public void checkAnswer() {
+        Intent intent = getIntent();
+        String correctAnswer = intent.getStringExtra("currentAnswer");
+        Button optionOne = findViewById(R.id.optionOneButton);
+        Button optionTwo = findViewById(R.id.optionTwoButton);
+        Button optionThree = findViewById(R.id.optionThreeButton);
+        Button correctButton;
+
+        if (correctAnswer.equals(optionOne.getText().toString())) {
+            correctButton = optionOne;
+        } else if (correctAnswer.equals(optionTwo.getText().toString())) {
+            correctButton = optionTwo;
+        } else if (correctAnswer.equals(optionThree.getText().toString())) {
+            correctButton = optionThree;
+        } else {
+            correctButton = null;
+            Toast.makeText(this, "An error has occurred", Toast.LENGTH_SHORT).show();
+        }
+
+        if (correctButton == buttonClicked) {
+            Integer temp = Integer.parseInt(intent.getStringExtra("tally"));
+            temp += 1;
+            intent.putExtra("tally", temp.toString());
+            correctButton.setBackgroundColor(Color.GREEN);
+
+        } else {
+            buttonClicked.setBackgroundColor(Color.RED);
+            correctButton.setBackgroundColor(Color.GREEN);
+        }
+        canClick = false;
+    }
+
+    public void next(View view) {
         Intent intent = getIntent();
         String qNum = intent.getStringExtra("questionNum");
 
@@ -106,43 +169,7 @@ public class QuestionScreen extends AppCompatActivity {
             intent2.putExtra("questionNum", intNum.toString());
             intent2.putExtra("username", intent.getStringExtra("username"));
             intent2.putExtra("tally", intent.getStringExtra("tally"));
-            intent2.putExtra("currentAnswer", intent.getStringExtra("currentAnswer"));
-            intent2.putExtra("nextAnswer", intent.getStringExtra("nextAnswer"));
             startActivity(intent2);
         }
-    }
-
-    public void buttonOne(View view) {
-        if (canClick) {
-            Button clicked = findViewById(R.id.optionOneButton);
-            checkAnswer(clicked);
-        }
-    }
-
-    public void buttonTwo(View view) {
-        if (canClick) {
-            Button clicked = findViewById(R.id.optionTwoButton);
-            checkAnswer(clicked);
-        }
-    }
-
-    public void buttonThree(View view) {
-        if (canClick) {
-            Button clicked = findViewById(R.id.optionThreeButton);
-            checkAnswer(clicked);
-        }
-    }
-
-    public void checkAnswer(Button clicked) {
-        Intent intent = getIntent();
-        String correctAnswer = intent.getStringExtra("currentAnswer");
-
-        if (correctAnswer.equals(clicked.getText().toString())) {
-            intent.putExtra("tally", Integer.parseInt(intent.getStringExtra("tally")) + 1);
-            clicked.setBackgroundColor(Color.GREEN);
-        } else {
-            clicked.setBackgroundColor(Color.RED);
-        }
-        canClick = false;
     }
 }
